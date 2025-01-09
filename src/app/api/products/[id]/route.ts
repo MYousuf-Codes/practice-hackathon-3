@@ -17,7 +17,8 @@ export async function GET(
     }
 
     return NextResponse.json(product);
-  } catch (error) {
+  } catch {
+    // Remove unused variable and directly handle the error
     return NextResponse.json(
       { error: "Failed to fetch data" },
       { status: 500 }
