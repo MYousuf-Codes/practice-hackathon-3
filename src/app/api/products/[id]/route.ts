@@ -2,9 +2,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
-  const { id } = params;
+  const { id } = context.params;
 
   try {
     const res = await fetch("https://67800db80476123f76a95fac.mockapi.io/api/products");
@@ -17,8 +17,7 @@ export async function GET(
     }
 
     return NextResponse.json(product);
-  } catch {
-    // Remove unused variable and directly handle the error
+  } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch data" },
       { status: 500 }
