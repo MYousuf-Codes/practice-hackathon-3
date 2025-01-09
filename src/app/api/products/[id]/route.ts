@@ -1,26 +1,26 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 
-const MOCK_API_URL = process.env.MOCK_API_URL;
-
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  if (!MOCK_API_URL) {
-    return NextResponse.json({ message: 'MOCK_API_URL is not defined' }, { status: 500 });
-  }
-
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: string } }
+) {
   const { id } = params;
 
   try {
-    const response = await fetch(`${MOCK_API_URL}/${id}`);
+    const res = await fetch("https://67800db80476123f76a95fac.mockapi.io/api/products");
+    const products = await res.json();
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch product with ID ${id}: ${response.statusText}`);
+    const product = products.find((item: { id: string }) => item.id === id);
+
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    const product = await response.json();
-
-    return NextResponse.json(product, { status: 200 });
+    return NextResponse.json(product);
   } catch (error) {
-    console.error(`Error fetching product with ID ${id}:`, error);
-    return NextResponse.json({ message: 'Internal Server Error' }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch data" },
+      { status: 500 }
+    );
   }
 }
