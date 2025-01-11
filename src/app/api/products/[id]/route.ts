@@ -2,12 +2,14 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   request: NextRequest,
-  context: { params: { id: string } }
+  { params }: { params: { id: string } }
 ) {
-  const { id } = context.params;
+  const { id } = params;
 
   try {
-    const res = await fetch("https://67800db80476123f76a95fac.mockapi.io/api/products");
+    const res = await fetch(
+      "https://67800db80476123f76a95fac.mockapi.io/api/products"
+    );
     const products = await res.json();
 
     const product = products.find((item: { id: string }) => item.id === id);
@@ -17,8 +19,8 @@ export async function GET(
     }
 
     return NextResponse.json(product);
-  } catch (_error) {
-    console.error("Error fetching product:", _error);
+  } catch (error) {
+    console.error("Error fetching product:", error);
     return NextResponse.json(
       { error: "Failed to fetch data" },
       { status: 500 }
